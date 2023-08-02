@@ -7,6 +7,11 @@
     <PokemonPicture :pokemonId="pokemon.id" :showPokemon="showPokemon" />
 
     <PokemonOptions :pokemons="pokemonArr" @selection="checkAnswer" />
+
+    <template v-if="showAnswer">
+      <h2 class="fade-in">{{ menssage }}</h2>
+      <button @click="newGame">Nuevo Juego</button>
+    </template>
   </div>
 </template>
 
@@ -27,6 +32,8 @@ export default {
       pokemonArr: [],
       pokemon: null,
       showPokemon: false,
+      showAnswer: false,
+      menssage: "",
     };
   },
   methods: {
@@ -35,8 +42,23 @@ export default {
       const rndInt = Math.floor(Math.random() * 4);
       this.pokemon = this.pokemonArr[rndInt];
     },
-    checkAnswer(pokemonId) {
+    checkAnswer(selectedId) {
       this.showPokemon = true;
+      this.showAnswer = true;
+
+      if (selectedId === this.pokemon.id) {
+        this.menssage = `Correcto, ${this.pokemon.name}`;
+      } else {
+        this.menssage = `Upss, era ${this.pokemon.name}`;
+      }
+    },
+
+    newGame() {
+      this.showPokemon = false;
+      this.showAnswer = false;
+      this.pokemonArr = [];
+      this.pokemon = null;
+      this.mixPokemonsArray();
     },
   },
   mounted() {
